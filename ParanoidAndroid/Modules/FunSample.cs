@@ -11,7 +11,19 @@ namespace ParanoidAndroid
         [Command("hello")] // Command name.
         [Summary("Say hello to the bot.")] // Command summary.
         public async Task Hello()
-            => await ReplyAsync($"Hello there, **{Context.User.Username}**!");
+        {
+            if (Context.Message.Author.Id == 184787955238436864)
+                await ReplyAsync($"Hei Anders! Visste du dette?: Mao Zedong (tradisjonell kinesisk: 毛澤東, " +
+                    $"forenklet kinesisk: 毛泽东, pinyin: Máo Zédōng; Wade-Giles: Mao Tse-tung," +
+                    $"født 26. desember 1893 i Shaoshan i Hunan i Kina, død 9. september 1976 i " +
+                    $"Beijing) var en kinesisk kommunist, statsleder, revolusjonær og" +
+                    $"teoretiker. Han ledet Kinas kommunistparti til seier i den kinesiske " +
+                    $"borgerkrigen og grunnla Folkerepublikken Kina i 1949, som han ledet fram " +
+                    $"til sin død i 1976. Mao er også grunnleggeren av en retning innen " +
+                    $"marxismen-leninismen kjent som maoismen.");
+            else
+                await ReplyAsync($"Hello there, **{Context.User.Username}**!");
+        }
 
         [Command("pick")]
         [Alias("choose")] // Aliases that will also trigger the command.
@@ -25,17 +37,7 @@ namespace ParanoidAndroid
             await ReplyAsync($"I choose **{selection}**");
         }
 
-        [Command("cookie")]
-        [Summary("Give someone a cookie.")]
-        public async Task Cookie(SocketGuildUser user)
-        {
-            if (Context.Message.Author.Id == user.Id)
-                await ReplyAsync($"{Context.User.Mention} doesn't have anyone to share a cookie with... :(");
-            else
-                await ReplyAsync($"{Context.User.Mention} shared a cookie with **{user.Username}** :cookie:");
-        }
-
-        [Command("amiadmin")]
+        [Command("admin???")]
         [Summary("Check your administrator status")]
         public async Task AmIAdmin()
         {
