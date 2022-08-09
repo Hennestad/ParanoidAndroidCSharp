@@ -1,38 +1,64 @@
-﻿using Discord;
+﻿using System;
+using System.Threading.Tasks;
+using Discord;
 using Discord.WebSocket;
+using Discord.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
 
 namespace ParanoidAndroid
 {
-	public class Program
-	{
-		public static Task Main(string[] args) => new Program().MainAsync();
-
-        private DiscordSocketClient Client;
+    public class Program
+    {
+        static void Main(string[] args)
+            => new Program().MainAsync().GetAwaiter().GetResult();
 
         public async Task MainAsync()
-		{
-            Client = new DiscordSocketClient();
+        {
+            using var services = ConfigureServices();
 
-            Client.Log += Log;
+            Console.WriteLine("Ready for takeoff...");
+            var client = services.GetRequiredService<DiscordSocketClient>();
 
-            // var token = File.ReadAllText("token.txt");
-            var token = File.ReadAllText("../../../token.txt");
+            client.Log += Log;
+            services.GetRequiredService<CommandService>().Log += Log;
 
-            await Client.LoginAsync(TokenType.Bot, token);
-            await Client.StartAsync();
+            // Get the bot token from the Config.json file.
+            JObject config = Functions.GetConfig();
+            string token = config["token"].Value<string>();
 
-            // Block this task until the program is closed.
+            // Log in to Discord and start the bot.
+            await client.LoginAsync(TokenType.Bot, token);
+            await client.StartAsync();
+
+            await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
+
+            // Run the bot forever.
             await Task.Delay(-1);
         }
 
-		private Task Log(LogMessage msg)
-		{
-			Console.WriteLine(msg.ToString());
-			return Task.CompletedTask;
-		}
+        public ServiceProvider ConfigureServices()
+        {
+            return new ServiceCollection()
+                .AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
+                {
+                    MessageCacheSize = 500,
+                    LogLevel = LogSeverity.Info
+                }))
+                .AddSingleton(new CommandService(new CommandServiceConfig
+                {
+                    LogLevel = LogSeverity.Info,
+                    DefaultRunMode = RunMode.Async,
+                    CaseSensitiveCommands = false
+                }))
+                .AddSingleton<CommandHandlingService>()
+                .BuildServiceProvider();
+        }
 
+        private Task Log(LogMessage log)
+        {
+            Console.WriteLine(log.ToString());
+            return Task.CompletedTask;
+        }
     }
-
 }
