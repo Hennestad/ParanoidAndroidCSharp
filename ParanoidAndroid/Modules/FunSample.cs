@@ -20,7 +20,10 @@ namespace ParanoidAndroid
                     $"teoretiker. Han ledet Kinas kommunistparti til seier i den kinesiske " +
                     $"borgerkrigen og grunnla Folkerepublikken Kina i 1949, som han ledet fram " +
                     $"til sin død i 1976. Mao er også grunnleggeren av en retning innen " +
-                    $"marxismen-leninismen kjent som maoismen.");
+                    $"marxismen-leninismen kjent som maoismen." +
+                    $"Her har du ett bilde av han! :)" +
+                    $"\n" +
+                    $"https://media.snl.no/media/67119/standard_compressed_sz8318b2.jpg");
             else
                 await ReplyAsync($"Hello there, **{Context.User.Username}**!");
         }
