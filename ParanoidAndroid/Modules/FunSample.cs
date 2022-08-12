@@ -9,6 +9,7 @@ namespace ParanoidAndroid
     {
 
         [Command("hello")] // Command name.
+        [Alias("hei")] // Aliases that will also trigger the command.
         [Summary("Say hello to the bot.")] // Command summary.
         public async Task Hello()
         {
@@ -29,7 +30,7 @@ namespace ParanoidAndroid
         }
 
         [Command("pick")]
-        [Alias("choose")] // Aliases that will also trigger the command.
+        [Alias("choose")]
         [Summary("Pick something.")]
         public async Task Pick([Remainder] string message = "")
         {
