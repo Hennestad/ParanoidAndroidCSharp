@@ -14,9 +14,9 @@ namespace ParanoidAndroid
         {
             JObject config = GetConfig();
 
-            string currently = config["currently"]?.Value<string>().ToLower();
-            string statusText = config["playing_status"]?.Value<string>();
-            string onlineStatus = config["status"]?.Value<string>().ToLower();
+            string? currently = config["currently"]?.Value<string>().ToLower();
+            string? statusText = config["playing_status"]?.Value<string>();
+            string? onlineStatus = config["status"]?.Value<string>().ToLower();
 
             // Set the online status
             if (!string.IsNullOrEmpty(onlineStatus))
