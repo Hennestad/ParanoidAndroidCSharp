@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ParanoidAndroid": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
