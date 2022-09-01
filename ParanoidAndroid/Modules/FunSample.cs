@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace ParanoidAndroid
+namespace ParanoidAndroid.Modules
 {
     public class FunSample : ModuleBase<SocketCommandContext>
     {
