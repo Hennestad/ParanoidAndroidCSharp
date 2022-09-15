@@ -1,65 +1,53 @@
-﻿using System;
-using System.Threading; // 1) Add this namespace
-using System.Threading.Tasks;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using System;
+using System.Threading.Tasks;
+using System.IO;
+using System.Xml;
+using System.Reflection.Emit;
 
-public class TimerService
+namespace ParanoidAndroid.Modules
 {
-    private readonly Timer _timer; // 2) Add a field like this
-    // This example only concerns a single timer.
-    // If you would like to have multiple independant timers,
-    // you could use a collection such as List<Timer>,
-    // or even a Dictionary<string, Timer> to quickly get
-    // a specific Timer instance by name.
-
-    public TimerService(DiscordSocketClient client)
+    public class News : ModuleBase<SocketCommandContext>
     {
-        _timer = new Timer(async _ =>
+        [Command("news")] // Command name.
+        [Alias("nyheter")] // Aliases that will also trigger the command.
+        [Summary("Make the bot post the latest news.")] // Command summary.
+
+        public async Task NrkNews()
         {
-            // 3) Any code you want to periodically run goes here, for example:
-            var chan = client.GetChannel(812099435143495681) as IMessageChannel;
-            if (chan != null)
-                await chan.SendMessageAsync("hi");
-        },
-        null,
-        TimeSpan.FromMinutes(10),  // 4) Time that message should fire after the timer is created
-        TimeSpan.FromMinutes(30)); // 5) Time after which message should repeat (use `Timeout.Infinite` for no repeat)
-    }
+            //Create the XmlDocument.
+            XmlDocument doc = new XmlDocument();
+            doc.Load("https://www.nrk.no/nyheter/siste.rss");
 
-    public void Stop() // 6) Example to make the timer stop running
-    {
-        _timer.Change(Timeout.Infinite, Timeout.Infinite);
-    }
+            //Display all the titles.
+            XmlNodeList titleList = doc.GetElementsByTagName("title");
+            foreach (XmlNode title in titleList)
+            {
+                string titleText = title.InnerText;
 
-    public void Restart() // 7) Example to restart the timer
-    {
-        _timer.Change(TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(30));
-    }
-}
+                var embed = new EmbedBuilder
+                {
+                    // Embed property can be set within object initializer
+                    Title = titleText,
+                    Color = Color.Blue,
+                    //Description = "I am a description set by initializer."
+                };
+                // Or with methods
+                //embed.AddField("Title", "Field value. I also support [hyperlink markdown](https://example.com)!")
+                //    .WithAuthor(Context.Client.CurrentUser)
+                //    .WithFooter(footer => footer.Text = "I am a footer.")
+                //    .WithColor(Color.DarkRed)
+                //    .WithDescription("I am a description.")
+                //    .WithUrl("https://example.com")
+                //    .WithCurrentTimestamp();
 
-public class TimerModule : ModuleBase
-{
-    private readonly TimerService _service;
 
-    public TimerModule(TimerService service) // Make sure to configure your DI with your TimerService instance
-    {
-        _service = service;
-    }
+                //Your embed needs to be built before it is able to be sent
+                await ReplyAsync(embed: embed.Build());
+            }
 
-    // Example commands
-    [Command("stoptimer")]
-    public async Task StopCmd()
-    {
-        _service.Stop();
-        await ReplyAsync("Timer stopped.");
-    }
-
-    [Command("starttimer")]
-    public async Task RestartCmd()
-    {
-        _service.Restart();
-        await ReplyAsync("Timer (re)started.");
+        }
     }
 }

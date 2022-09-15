@@ -42,6 +42,7 @@ namespace ParanoidAndroid.Modules
         }
 
         [Command("admin???")]
+        [Alias("admin")]
         [Summary("Check your administrator status")]
         public async Task AmIAdmin()
         {
