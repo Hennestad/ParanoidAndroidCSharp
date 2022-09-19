@@ -1,64 +1,64 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
+﻿using Discord;
 using Discord.Commands;
-using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Linq;
+using Discord.WebSocket;
+using System;
+using System.Threading.Tasks;
+using System.IO;
+using System.Xml;
+using System.Reflection.Emit;
 
-namespace ParanoidAndroid
+namespace ParanoidAndroid.Modules
 {
-    public class Program
+    public class News : ModuleBase<SocketCommandContext>
     {
-        static void Main(string[] args)
-            => new Program().MainAsync().GetAwaiter().GetResult();
+        [Command("news")] // Command name.
+        [Alias("nyheter")] // Aliases that will also trigger the command.
+        [Summary("Make the bot post the latest news.")] // Command summary.
 
-        public async Task MainAsync()
+        public async Task NrkNews()
         {
-            using var services = ConfigureServices();
+            //Create the XmlDocument.
+            XmlDocument doc = new XmlDocument();
+            doc.Load("https://www.nrk.no/nyheter/siste.rss");
 
-            Console.WriteLine("Ready for takeoff...");
-            var client = services.GetRequiredService<DiscordSocketClient>();
+            //Display all the titles.
+            XmlNodeList nodeList = doc.GetElementsByTagName("item");
+            foreach (XmlNode xmlNode in nodeList)
+            {
+                string titleText = xmlNode["title"].InnerText;
+                string descriptionText = xmlNode["description"].InnerText;
+                string urlText = xmlNode["link"].InnerText;
+                string pubDateText = xmlNode["pubDate"].InnerText;
+                string categoryText = xmlNode["category"].InnerText;
+                string mediaUrl = xmlNode["media:content"].Attributes["url"].Value;
 
-            client.Log += Log;
-            services.GetRequiredService<CommandService>().Log += Log;
 
-            // Get the bot token from the Config.json file.
-            JObject config = Functions.GetConfig();
-            string token = config["token"].Value<string>();
 
-            // Log in to Discord and start the bot.
-            await client.LoginAsync(TokenType.Bot, token);
-            await client.StartAsync();
-
-            await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
-
-            // Run the bot forever.
-            await Task.Delay(-1);
-        }
-
-        public ServiceProvider ConfigureServices()
-        {
-            return new ServiceCollection()
-                .AddSingleton(new DiscordSocketClient(new DiscordSocketConfig
+                var embed = new EmbedBuilder
                 {
-                    MessageCacheSize = 500,
-                    LogLevel = LogSeverity.Info
-                }))
-                .AddSingleton(new CommandService(new CommandServiceConfig
-                {
-                    LogLevel = LogSeverity.Info,
-                    DefaultRunMode = RunMode.Async,
-                    CaseSensitiveCommands = false
-                }))
-                .AddSingleton<CommandHandlingService>()
-                .BuildServiceProvider();
-        }
+                    // Embed property can be set within object initializer
+                    Color = Color.Blue,
+                    Title = titleText,
+                    Description = descriptionText,
+                    Url = urlText,
+                    ImageUrl = mediaUrl,
 
-        private Task Log(LogMessage log)
-        {
-            Console.WriteLine(log.ToString());
-            return Task.CompletedTask;
+                    //Description = "I am a description set by initializer."
+                };
+                // Or with methods
+                //embed.AddField("Title", "Field value. I also support [hyperlink markdown](https://example.com)!")
+                //    .WithAuthor(Context.Client.CurrentUser)
+                embed.WithFooter(footer => footer.Text = pubDateText + $"\n" + categoryText);
+                //    .WithColor(Color.DarkRed)
+                //    .WithDescription("I am a description.")
+                //    .WithUrl("https://example.com")
+                //    .WithCurrentTimestamp();
+
+
+                //Your embed needs to be built before it is able to be sent
+                await ReplyAsync(embed: embed.Build());
+            }
+
         }
     }
 }
