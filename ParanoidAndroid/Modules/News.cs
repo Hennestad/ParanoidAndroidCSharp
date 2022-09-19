@@ -30,7 +30,7 @@ namespace ParanoidAndroid.Modules
                 string urlText = xmlNode["link"].InnerText;
                 string pubDateText = xmlNode["pubDate"].InnerText;
                 string categoryText = xmlNode["category"].InnerText;
-                string mediaUrl = xmlNode["media:content"].Attributes["url"].Value;
+                //string imageUrlText = xmlNode["media:content"].Attributes["url"].Value;
 
 
 
@@ -41,17 +41,14 @@ namespace ParanoidAndroid.Modules
                     Title = titleText,
                     Description = descriptionText,
                     Url = urlText,
-                    ImageUrl = mediaUrl,
+                    //ImageUrl = imageUrlText,
 
                     //Description = "I am a description set by initializer."
                 };
                 // Or with methods
                 //embed.AddField("Title", "Field value. I also support [hyperlink markdown](https://example.com)!")
-                //    .WithAuthor(Context.Client.CurrentUser)
+                embed.WithAuthor("NRK");
                 embed.WithFooter(footer => footer.Text = pubDateText + $"\n" + categoryText);
-                //    .WithColor(Color.DarkRed)
-                //    .WithDescription("I am a description.")
-                //    .WithUrl("https://example.com")
                 //    .WithCurrentTimestamp();
 
 
