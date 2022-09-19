@@ -29,7 +29,8 @@ namespace ParanoidAndroid.Modules
                 string descriptionText = xmlNode["description"].InnerText;
                 string urlText = xmlNode["link"].InnerText;
                 string pubDateText = xmlNode["pubDate"].InnerText;
-                string categoryText = xmlNode["category"].InnerText;
+                //string categoryText = xmlNode["category"].InnerText;
+                string thumbnailUrlText = "https://upload.wikimedia.org/wikipedia/commons/8/87/NRK_Nyheter.png";
                 //string imageUrlText = xmlNode["media:content"].Attributes["url"].Value;
 
 
@@ -41,6 +42,7 @@ namespace ParanoidAndroid.Modules
                     Title = titleText,
                     Description = descriptionText,
                     Url = urlText,
+                    ThumbnailUrl = thumbnailUrlText,
                     //ImageUrl = imageUrlText,
 
                     //Description = "I am a description set by initializer."
@@ -48,7 +50,7 @@ namespace ParanoidAndroid.Modules
                 // Or with methods
                 //embed.AddField("Title", "Field value. I also support [hyperlink markdown](https://example.com)!")
                 embed.WithAuthor("NRK");
-                embed.WithFooter(footer => footer.Text = pubDateText + $"\n" + categoryText);
+                embed.WithFooter(footer => footer.Text = pubDateText);
                 //    .WithCurrentTimestamp();
 
 
