@@ -30,10 +30,17 @@ namespace ParanoidAndroid.Modules
                 string urlText = xmlNode["link"].InnerText;
                 string pubDateText = xmlNode["pubDate"].InnerText;
                 //string categoryText = xmlNode["category"].InnerText;
-                string thumbnailUrlText = "https://upload.wikimedia.org/wikipedia/commons/8/87/NRK_Nyheter.png";
-                //string imageUrlText = xmlNode["media:content"].Attributes["url"].Value;
-
-
+                //string thumbnailUrlText = "https://upload.wikimedia.org/wikipedia/commons/8/87/NRK_Nyheter.png";
+                string imageUrlText = "No Image"; 
+                if (xmlNode["media:content"]!=null)
+                {
+                    imageUrlText = xmlNode["media:content"].Attributes["url"].Value;
+                }
+                else
+                {
+                    imageUrlText = "https://static.nrk.no/nrkno/serum/2.0.476/common/img/nrk-logo-white-72x26.png";
+                }
+                    
 
                 var embed = new EmbedBuilder
                 {
@@ -42,16 +49,15 @@ namespace ParanoidAndroid.Modules
                     Title = titleText,
                     Description = descriptionText,
                     Url = urlText,
-                    ThumbnailUrl = thumbnailUrlText,
-                    //ImageUrl = imageUrlText,
+                    //ThumbnailUrl = thumbnailUrlText,
+                    ImageUrl = imageUrlText,
 
                     //Description = "I am a description set by initializer."
                 };
                 // Or with methods
-                //embed.AddField("Title", "Field value. I also support [hyperlink markdown](https://example.com)!")
                 embed.WithAuthor("NRK");
                 embed.WithFooter(footer => footer.Text = pubDateText);
-                //    .WithCurrentTimestamp();
+                //    embed.WithCurrentTimestamp();
 
 
                 //Your embed needs to be built before it is able to be sent
