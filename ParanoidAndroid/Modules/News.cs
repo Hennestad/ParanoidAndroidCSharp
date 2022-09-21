@@ -22,26 +22,42 @@ namespace ParanoidAndroid.Modules
             doc.Load("https://www.nrk.no/nyheter/siste.rss");
 
             //Display all the titles.
-            XmlNodeList titleList = doc.GetElementsByTagName("title");
-            foreach (XmlNode title in titleList)
+            XmlNodeList nodeList = doc.GetElementsByTagName("item");
+            foreach (XmlNode xmlNode in nodeList)
             {
-                string titleText = title.InnerText;
+                string titleText = xmlNode["title"].InnerText;
+                string descriptionText = xmlNode["description"].InnerText;
+                string urlText = xmlNode["link"].InnerText;
+                string pubDateText = xmlNode["pubDate"].InnerText;
+                //string categoryText = xmlNode["category"].InnerText;
+                //string thumbnailUrlText = "https://upload.wikimedia.org/wikipedia/commons/8/87/NRK_Nyheter.png";
+                string imageUrlText = "No Image"; 
+                if (xmlNode["media:content"]!=null)
+                {
+                    imageUrlText = xmlNode["media:content"].Attributes["url"].Value;
+                }
+                else
+                {
+                    imageUrlText = "https://static.nrk.no/nrkno/serum/2.0.476/common/img/nrk-logo-white-72x26.png";
+                }
+                    
 
                 var embed = new EmbedBuilder
                 {
                     // Embed property can be set within object initializer
-                    Title = titleText,
                     Color = Color.Blue,
+                    Title = titleText,
+                    Description = descriptionText,
+                    Url = urlText,
+                    //ThumbnailUrl = thumbnailUrlText,
+                    ImageUrl = imageUrlText,
+
                     //Description = "I am a description set by initializer."
                 };
                 // Or with methods
-                //embed.AddField("Title", "Field value. I also support [hyperlink markdown](https://example.com)!")
-                //    .WithAuthor(Context.Client.CurrentUser)
-                //    .WithFooter(footer => footer.Text = "I am a footer.")
-                //    .WithColor(Color.DarkRed)
-                //    .WithDescription("I am a description.")
-                //    .WithUrl("https://example.com")
-                //    .WithCurrentTimestamp();
+                embed.WithAuthor("NRK");
+                embed.WithFooter(footer => footer.Text = pubDateText);
+                //    embed.WithCurrentTimestamp();
 
 
                 //Your embed needs to be built before it is able to be sent
