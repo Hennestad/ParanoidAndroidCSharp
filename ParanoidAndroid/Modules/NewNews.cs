@@ -22,9 +22,11 @@ namespace ParanoidAndroid.Modules
             XDocument nodeList = XDocument.Load("https://www.nrk.no/nyheter/siste.rss");
 
             //Get all the descendant elements of the item elements.
-            foreach (XElement element in nodeList.Descendants("item"))
+            foreach (XElement element in nodeList.Descendants("item").Where(x => x.Element("category")?.Value == "Krigen i Ukraina"))
             {
-                XNamespace media = "http://search.yahoo.com/mrss/";
+                if (element != null)
+                {
+                    XNamespace media = "http://search.yahoo.com/mrss/";
 
                 string titleText = element.Element("title").Value;
                 string descriptionText = element.Element("description").Value;
@@ -62,6 +64,11 @@ namespace ParanoidAndroid.Modules
 
                 //Your embed needs to be built before it is able to be sent
                 await ReplyAsync(embed: embed.Build());
+
+                }
+
+                else
+                { Console.WriteLine("EmptyNews"); }
             }
 
         }
