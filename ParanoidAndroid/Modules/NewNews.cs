@@ -67,7 +67,7 @@ namespace ParanoidAndroid.Modules
 
                 }
 
-                if (element == null)
+                else
                 {
                     var noNews = new EmbedBuilder
                     {
