@@ -46,7 +46,7 @@ namespace ParanoidAndroid.Modules
                     imageUrlText = "https://static.nrk.no/nrkno/serum/2.0.476/common/img/nrk-logo-white-72x26.png";
                 }
 
-                var embed = new EmbedBuilder
+                var news = new EmbedBuilder
                 {
                     // Embed property can be set within object initializer
                     Color = Color.Blue,
@@ -57,18 +57,28 @@ namespace ParanoidAndroid.Modules
                     ImageUrl = imageUrlText,
                 };
                 // Or with methods
-                embed.WithAuthor("NRK");
+                news.WithAuthor("NRK");
                 //embed.WithFooter(footer => footer.Text = pubDateText);
                 //    embed.WithCurrentTimestamp();
 
 
                 //Your embed needs to be built before it is able to be sent
-                await ReplyAsync(embed: embed.Build());
+                await ReplyAsync(embed: news.Build());
 
                 }
 
-                else
-                { Console.WriteLine("EmptyNews"); }
+                if (element == null)
+                {
+                    var noNews = new EmbedBuilder
+                    {
+                        Color = Color.Red,
+                        Title = "No News",
+                        Description = "No news on this topic right now.",
+                    };
+                    noNews.WithAuthor("NRK");
+
+                    await ReplyAsync(embed: noNews.Build());
+                }
             }
 
         }
