@@ -16,13 +16,13 @@ namespace ParanoidAndroid.Modules
         [Alias("nynyheter")] // Aliases that will also trigger the command.
         [Summary("Make the bot post the latest news.")] // Command summary.
 
-        public async Task NrkNews()
+        public async Task NrkNews([Remainder] string categoryInput)
         {
             //Create the XmlDocument.
             XDocument nodeList = XDocument.Load("https://www.nrk.no/nyheter/siste.rss");
 
             //Get all the descendant elements of the item elements.
-            foreach (XElement element in nodeList.Descendants("item").Where(x => x.Element("category")?.Value == "Krigen i Ukraina"))
+            foreach (XElement element in nodeList.Descendants("item").Where(x => x.Element("category")?.Value == categoryInput))
             {
                 if (element != null)
                 {
