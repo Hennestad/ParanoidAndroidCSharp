@@ -32,6 +32,8 @@ namespace ParanoidAndroid.Modules
                 //string categoryText = xmlNode["category"].InnerText;
                 //string thumbnailUrlText = "https://upload.wikimedia.org/wikipedia/commons/8/87/NRK_Nyheter.png";
                 string imageUrlText = "No Image"; 
+
+                //If image attribute is null, replace it with a default image. 
                 if (xmlNode["media:content"]!=null)
                 {
                     imageUrlText = xmlNode["media:content"].Attributes["url"].Value;
@@ -41,7 +43,6 @@ namespace ParanoidAndroid.Modules
                     imageUrlText = "https://static.nrk.no/nrkno/serum/2.0.476/common/img/nrk-logo-white-72x26.png";
                 }
                     
-
                 var embed = new EmbedBuilder
                 {
                     // Embed property can be set within object initializer
@@ -51,8 +52,6 @@ namespace ParanoidAndroid.Modules
                     Url = urlText,
                     //ThumbnailUrl = thumbnailUrlText,
                     ImageUrl = imageUrlText,
-
-                    //Description = "I am a description set by initializer."
                 };
                 // Or with methods
                 embed.WithAuthor("NRK");
