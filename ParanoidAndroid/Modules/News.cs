@@ -22,7 +22,7 @@ namespace ParanoidAndroid.Modules
             XDocument nodeList = XDocument.Load("https://www.nrk.no/nyheter/siste.rss");
 
             //Get all the descendant elements of the item elements.
-            foreach (XElement element in nodeList.Descendants("item").Where(x => x.Element("category")?.Value == categoryInput))
+            foreach (XElement element in nodeList.Descendants("item").Where(x => x.Element("description")?.Value.Contains(categoryInput, StringComparison.OrdinalIgnoreCase) == true))
             {
                 if (element != null)
                 {
@@ -67,18 +67,18 @@ namespace ParanoidAndroid.Modules
 
                 }
 
-                else
-                {
-                    var noNews = new EmbedBuilder
-                    {
-                        Color = Color.Red,
-                        Title = "No News",
-                        Description = "No news on this topic right now.",
-                    };
-                    noNews.WithAuthor("NRK");
+                //if (element == null)
+                //{
+                //    var noNews = new EmbedBuilder
+                //    {
+                //        Color = Color.Red,
+                //        Title = "No News",
+                //        Description = "No news on this topic right now.",
+                //    };
+                //    noNews.WithAuthor("NRK");
 
-                    await ReplyAsync(embed: noNews.Build());
-                }
+                //    await ReplyAsync(embed: noNews.Build());
+                //}
             }
 
         }
