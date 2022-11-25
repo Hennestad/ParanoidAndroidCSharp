@@ -31,9 +31,6 @@ namespace ParanoidAndroid.Modules
                 string titleText = element.Element("title").Value;
                 string descriptionText = element.Element("description").Value;
                 string urlText = element.Element("link").Value;
-                //string pubDateText = element.Element("pubdate").Value;
-                //string categoryText = element.Element("category").Value;
-               // string thumbnailUrlText = "https://upload.wikimedia.org/wikipedia/commons/8/87/NRK_Nyheter.png";
                 string imageUrlText = "No Image";
 
                 //If image attribute is null, replace it with a default image. 
@@ -53,32 +50,16 @@ namespace ParanoidAndroid.Modules
                     Title = titleText,
                     Description = descriptionText,
                     Url = urlText,
-                    //ThumbnailUrl = thumbnailUrlText,
                     ImageUrl = imageUrlText,
                 };
                 // Or with methods
                 news.WithAuthor("Siste nytt – NRK");
-                //embed.WithFooter(footer => footer.Text = pubDateText);
-                //    embed.WithCurrentTimestamp();
 
 
                 //Your embed needs to be built before it is able to be sent
                 await ReplyAsync(embed: news.Build());
 
                 }
-
-                //if (element == null)
-                //{
-                //    var noNews = new EmbedBuilder
-                //    {
-                //        Color = Color.Red,
-                //        Title = "No News",
-                //        Description = "No news on this topic right now.",
-                //    };
-                //    noNews.WithAuthor("NRK");
-
-                //    await ReplyAsync(embed: noNews.Build());
-                //}
             }
 
         }
