@@ -1,25 +1,24 @@
-﻿using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
+﻿using Discord.Commands;
+using Discord;
 using System;
-using System.Threading.Tasks;
-using System.IO;
-using System.Reflection.Emit;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace ParanoidAndroid.Modules
 {
-    public class News : ModuleBase<SocketCommandContext>
+    public class NewsNews : ModuleBase<SocketCommandContext>
     {
-        [Command("nyhet")] // Command name.
-        [Alias("nyheter")] // Aliases that will also trigger the command.
-        [Summary("Make the bot post the latest news in norwegian.")] // Command summary.
+        [Command("news")] // Command name.
+        [Alias("newsnews")] // Aliases that will also trigger the command.
+        [Summary("Make the bot post the latest news in english.")] // Command summary.
 
         public async Task NrkNews([Remainder] string categoryInput)
         {
             //Create the XmlDocument.
-            XDocument nodeList = XDocument.Load("https://www.nrk.no/nyheter/siste.rss");
+            XDocument nodeList = XDocument.Load("http://feeds.bbci.co.uk/news/world/rss.xml");
 
             //Get all the descendant elements of the item elements.
             foreach (XElement element in nodeList.Descendants("item").Where(x => x.Element("description")?.Value.Contains(categoryInput, StringComparison.OrdinalIgnoreCase) == true))
@@ -40,13 +39,13 @@ namespace ParanoidAndroid.Modules
                     }
                     else
                     {
-                        imageUrlText = "https://static.nrk.no/nrkno/serum/2.0.476/common/img/nrk-logo-white-72x26.png";
+                        imageUrlText = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png";
                     }
 
                     var news = new EmbedBuilder
                     {
                         // Embed property can be set within object initializer
-                        Color = Color.Blue,
+                        Color = Color.DarkRed,
                         Title = titleText,
                         Description = descriptionText,
                         Url = urlText,
@@ -54,7 +53,7 @@ namespace ParanoidAndroid.Modules
                     };
 
                     // Or with methods
-                    news.WithAuthor("Siste nytt – NRK");
+                    news.WithAuthor("Latest News – BBC");
 
 
                     //Your embed needs to be built before it is able to be sent
