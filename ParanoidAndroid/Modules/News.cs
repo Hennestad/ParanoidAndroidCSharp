@@ -22,7 +22,10 @@ namespace ParanoidAndroid.Modules
             XDocument nodeList = XDocument.Load("https://www.nrk.no/nyheter/siste.rss");
 
             //Get all the descendant elements of the item elements.
-            foreach (XElement element in nodeList.Descendants("item").Where(x => x.Element("description")?.Value.Contains(categoryInput, StringComparison.OrdinalIgnoreCase) == true))
+            foreach (XElement element in nodeList.Descendants("item")
+                .Where(x => x.Element("description")?
+                .Value.Contains(categoryInput, StringComparison
+                .OrdinalIgnoreCase) == true))
             {
                 if (element != null)
                 {
