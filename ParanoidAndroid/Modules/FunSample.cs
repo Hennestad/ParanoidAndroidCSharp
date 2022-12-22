@@ -3,7 +3,7 @@ using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
 
-namespace ParanoidAndroid
+namespace ParanoidAndroid.Modules
 {
     public class FunSample : ModuleBase<SocketCommandContext>
     {
@@ -42,6 +42,7 @@ namespace ParanoidAndroid
         }
 
         [Command("admin???")]
+        [Alias("admin")]
         [Summary("Check your administrator status")]
         public async Task AmIAdmin()
         {
