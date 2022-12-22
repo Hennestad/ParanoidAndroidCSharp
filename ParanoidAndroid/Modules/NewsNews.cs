@@ -27,32 +27,31 @@ namespace ParanoidAndroid.Modules
                 {
                     XNamespace media = "http://search.yahoo.com/mrss/";
 
-                    string titleText = element.Element("title").Value;
-                    string descriptionText = element.Element("description").Value;
-                    string urlText = element.Element("link").Value;
-                    string imageUrlText = "No Image";
-
-                    //If image attribute is null, replace it with a default image. 
-                    if (element.Element(media + "content") != null)
-                    {
-                        imageUrlText = element.Element(media + "content").Attribute("url").Value;
-                    }
-                    else
-                    {
-                        imageUrlText = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png";
-                    }
-
+                    //EmbedBuilder
                     var news = new EmbedBuilder
                     {
                         // Embed property can be set within object initializer
-                        Color = Color.DarkRed,
-                        Title = titleText,
-                        Description = descriptionText,
-                        Url = urlText,
-                        ImageUrl = imageUrlText,
+                        Color = Color.Blue,
+                        ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png"
                     };
 
                     // Or with methods
+                    if (element.Element(media + "content") != null)
+                    {
+                        news.ImageUrl = element.Element(media + "content")?.Attribute("url")?.Value;
+                    }
+                    if (element.Element("title") != null)
+                    {
+                        news.Title = element.Element("title")?.Value;
+                    }
+                    if (element.Element("description") != null)
+                    {
+                        news.Description = element.Element("description")?.Value;
+                    }
+                    if (element.Element("link") != null)
+                    {
+                        news.Url = element.Element("link")?.Value;
+                    }
                     news.WithAuthor("Latest News – BBC");
 
 

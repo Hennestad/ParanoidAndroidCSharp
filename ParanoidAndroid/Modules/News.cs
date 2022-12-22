@@ -7,6 +7,7 @@ using System.IO;
 using System.Reflection.Emit;
 using System.Linq;
 using System.Xml.Linq;
+using static System.Net.WebRequestMethods;
 
 namespace ParanoidAndroid.Modules
 {
@@ -31,32 +32,31 @@ namespace ParanoidAndroid.Modules
                 {
                     XNamespace media = "http://search.yahoo.com/mrss/";
 
-                    string titleText = element.Element("title").Value;
-                    string descriptionText = element.Element("description").Value;
-                    string urlText = element.Element("link").Value;
-                    string imageUrlText = "No Image";
-
-                    //If image attribute is null, replace it with a default image. 
-                    if (element.Element(media + "content") != null)
-                    {
-                        imageUrlText = element.Element(media + "content").Attribute("url").Value;
-                    }
-                    else
-                    {
-                        imageUrlText = "https://static.nrk.no/nrkno/serum/2.0.476/common/img/nrk-logo-white-72x26.png";
-                    }
-
+                    //EmbedBuilder
                     var news = new EmbedBuilder
                     {
                         // Embed property can be set within object initializer
                         Color = Color.Blue,
-                        Title = titleText,
-                        Description = descriptionText,
-                        Url = urlText,
-                        ImageUrl = imageUrlText,
+                        ThumbnailUrl = "https://static.nrk.no/nrkno/serum/2.0.482/type/page/img/default.jpg"
                     };
 
                     // Or with methods
+                    if (element.Element(media + "content") != null)
+                    {
+                        news.ImageUrl = element.Element(media + "content")?.Attribute("url")?.Value;
+                    }
+                    if (element.Element("title") != null)
+                    { 
+                        news.Title = element.Element("title")?.Value;
+                    }
+                    if (element.Element("description") != null)
+                    {
+                        news.Description = element.Element("description")?.Value;
+                    }
+                    if (element.Element("link") != null)
+                    {
+                        news.Url = element.Element("link")?.Value;
+                    }
                     news.WithAuthor("Siste nytt – NRK");
 
 
