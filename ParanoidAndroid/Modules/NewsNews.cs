@@ -21,7 +21,10 @@ namespace ParanoidAndroid.Modules
             XDocument nodeList = XDocument.Load("http://feeds.bbci.co.uk/news/world/rss.xml");
 
             //Get all the descendant elements of the item elements.
-            foreach (XElement element in nodeList.Descendants("item").Where(x => x.Element("description")?.Value.Contains(categoryInput, StringComparison.OrdinalIgnoreCase) == true))
+            foreach (XElement element in nodeList.Descendants("item")
+                .Where(x => x.Element("description")?
+                .Value.Contains(categoryInput, StringComparison
+                .OrdinalIgnoreCase) == true))
             {
                 if (element != null)
                 {
@@ -37,21 +40,17 @@ namespace ParanoidAndroid.Modules
 
                     // Or with methods
                     if (element.Element(media + "content") != null)
-                    {
                         news.ImageUrl = element.Element(media + "content")?.Attribute("url")?.Value;
-                    }
+
                     if (element.Element("title") != null)
-                    {
                         news.Title = element.Element("title")?.Value;
-                    }
+
                     if (element.Element("description") != null)
-                    {
                         news.Description = element.Element("description")?.Value;
-                    }
+
                     if (element.Element("link") != null)
-                    {
                         news.Url = element.Element("link")?.Value;
-                    }
+
                     news.WithAuthor("Latest News – BBC");
 
 
