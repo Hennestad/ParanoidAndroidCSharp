@@ -27,51 +27,39 @@ namespace ParanoidAndroid.Modules
                 .Where(x => x.Element("description")?
                 .Value.Contains(categoryInput, StringComparison
                 .OrdinalIgnoreCase) == true))
+
+            if (!element.IsEmpty)
             {
-                if (element.HasElements)
+                XNamespace media = "http://search.yahoo.com/mrss/";
+
+                //EmbedBuilder
+                var news = new EmbedBuilder
                 {
-                    XNamespace media = "http://search.yahoo.com/mrss/";
+                    // Embed property can be set within object initializer
+                    Color = Color.Blue,
+                    ThumbnailUrl = "https://static.nrk.no/nrkno/serum/2.0.482/type/page/img/default.jpg"
+                };
 
-                    //EmbedBuilder
-                    var news = new EmbedBuilder
-                    {
-                        // Embed property can be set within object initializer
-                        Color = Color.Blue,
-                        ThumbnailUrl = "https://static.nrk.no/nrkno/serum/2.0.482/type/page/img/default.jpg"
-                    };
+                // Or with methods
+                if (element.Element(media + "content") != null)
+                    news.ImageUrl = element.Element(media + "content")?.Attribute("url")?.Value;
 
-                    // Or with methods
-                    if (element.Element(media + "content") != null)
-                        news.ImageUrl = element.Element(media + "content")?.Attribute("url")?.Value;
+                if (element.Element("title") != null)
+                    news.Title = element.Element("title")?.Value;
 
-                    if (element.Element("title") != null)
-                        news.Title = element.Element("title")?.Value;
+                if (element.Element("description") != null)
+                    news.Description = element.Element("description")?.Value;
 
-                    if (element.Element("description") != null)
-                        news.Description = element.Element("description")?.Value;
+                if (element.Element("link") != null)
+                    news.Url = element.Element("link")?.Value;
 
-                    if (element.Element("link") != null)
-                        news.Url = element.Element("link")?.Value;
-
-                    news.WithAuthor("Siste nytt – NRK");
+                news.WithAuthor("Siste nytt – NRK");
 
 
-                    //Your embed needs to be built before it is able to be sent
-                    await ReplyAsync(embed: news.Build());
+                //Your embed needs to be built before it is able to be sent
+                await ReplyAsync(embed: news.Build());
 
-                }
-                else
-                {
-                    var news = new EmbedBuilder
-                    {
-                        // Embed property can be set within object initializer
-                        Color = Color.Blue,
-                        ThumbnailUrl = "https://static.nrk.no/nrkno/serum/2.0.482/type/page/img/default.jpg",
-                        Description = "Newsnews"
-                    };
-                }
             }
-
         }
     }
 }

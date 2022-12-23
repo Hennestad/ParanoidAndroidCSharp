@@ -25,41 +25,37 @@ namespace ParanoidAndroid.Modules
                 .Where(x => x.Element("description")?
                 .Value.Contains(categoryInput, StringComparison
                 .OrdinalIgnoreCase) == true))
+            if (!element.IsEmpty)
             {
-                if (element != null)
+                XNamespace media = "http://search.yahoo.com/mrss/";
+
+                //EmbedBuilder
+                var news = new EmbedBuilder
                 {
-                    XNamespace media = "http://search.yahoo.com/mrss/";
+                    // Embed property can be set within object initializer
+                    Color = Color.Blue,
+                    ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png"
+                };
 
-                    //EmbedBuilder
-                    var news = new EmbedBuilder
-                    {
-                        // Embed property can be set within object initializer
-                        Color = Color.Blue,
-                        ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png"
-                    };
+                // Or with methods
+                if (element.Element(media + "content") != null)
+                    news.ImageUrl = element.Element(media + "content")?.Attribute("url")?.Value;
 
-                    // Or with methods
-                    if (element.Element(media + "content") != null)
-                        news.ImageUrl = element.Element(media + "content")?.Attribute("url")?.Value;
+                if (element.Element("title") != null)
+                    news.Title = element.Element("title")?.Value;
 
-                    if (element.Element("title") != null)
-                        news.Title = element.Element("title")?.Value;
+                if (element.Element("description") != null)
+                    news.Description = element.Element("description")?.Value;
 
-                    if (element.Element("description") != null)
-                        news.Description = element.Element("description")?.Value;
+                if (element.Element("link") != null)
+                    news.Url = element.Element("link")?.Value;
 
-                    if (element.Element("link") != null)
-                        news.Url = element.Element("link")?.Value;
-
-                    news.WithAuthor("Latest News – BBC");
+                news.WithAuthor("Latest News – BBC");
 
 
-                    //Your embed needs to be built before it is able to be sent
-                    await ReplyAsync(embed: news.Build());
-
-                }
+                //Your embed needs to be built before it is able to be sent
+                await ReplyAsync(embed: news.Build());
             }
-
         }
     }
 }
