@@ -22,13 +22,14 @@ namespace ParanoidAndroid.Modules
             //Create the XmlDocument.
             XDocument nodeList = XDocument.Load("https://www.nrk.no/nyheter/siste.rss");
 
+            //Are there any news?
+            bool foundNews = false;
+
             //Get all the descendant elements of the item elements.
             foreach (XElement element in nodeList.Descendants("item")
                 .Where(x => x.Element("description")?
                 .Value.Contains(categoryInput, StringComparison
                 .OrdinalIgnoreCase) == true))
-
-            if (!element.IsEmpty)
             {
                 XNamespace media = "http://search.yahoo.com/mrss/";
 
@@ -59,7 +60,27 @@ namespace ParanoidAndroid.Modules
                 //Your embed needs to be built before it is able to be sent
                 await ReplyAsync(embed: news.Build());
 
+                foundNews = true;
             }
+
+            if (foundNews == false)
+            {
+                //EmbedBuilder
+                var noNews = new EmbedBuilder
+                {
+                    // Embed property can be set within object initializer
+                    Color = Color.Blue,
+                    ThumbnailUrl = "https://static.nrk.no/nrkno/serum/2.0.482/type/page/img/default.jpg"
+                };
+
+                noNews.Title = "Ingen nyheter om " + categoryInput;
+
+                noNews.WithAuthor("Siste nytt – NRK");
+
+                //Your embed needs to be built before it is able to be sent
+                await ReplyAsync(embed: noNews.Build());
+            }
+
         }
     }
 }
