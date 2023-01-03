@@ -20,12 +20,14 @@ namespace ParanoidAndroid.Modules
             //Create the XmlDocument.
             XDocument nodeList = XDocument.Load("http://feeds.bbci.co.uk/news/world/rss.xml");
 
+            //Are there any news?
+            bool foundNews = false;
+
             //Get all the descendant elements of the item elements.
             foreach (XElement element in nodeList.Descendants("item")
                 .Where(x => x.Element("description")?
                 .Value.Contains(categoryInput, StringComparison
                 .OrdinalIgnoreCase) == true))
-            if (!element.IsEmpty)
             {
                 XNamespace media = "http://search.yahoo.com/mrss/";
 
@@ -55,7 +57,28 @@ namespace ParanoidAndroid.Modules
 
                 //Your embed needs to be built before it is able to be sent
                 await ReplyAsync(embed: news.Build());
+
+                foundNews = true;
             }
+
+            if (foundNews == false)
+            {
+                //EmbedBuilder
+                var noNews = new EmbedBuilder
+                {
+                    // Embed property can be set within object initializer
+                    Color = Color.Blue,
+                    ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png"
+                };
+
+                noNews.Title = "No news about " + categoryInput;
+
+                noNews.WithAuthor("The Latest News – BBC");
+
+                //Your embed needs to be built before it is able to be sent
+                await ReplyAsync(embed: noNews.Build());
+            }
+
         }
     }
 }
