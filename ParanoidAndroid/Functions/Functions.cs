@@ -52,7 +52,9 @@ namespace ParanoidAndroid
         public static JObject GetConfig()
         {
             // Get the config file.
-            using StreamReader configJson = new StreamReader("../../../Config.json");
+            string directoryPath = Directory.GetCurrentDirectory();
+            string modelPath = Path.Combine(directoryPath, "Config.json");
+            using StreamReader configJson = new StreamReader(modelPath);
             return (JObject)JsonConvert.DeserializeObject(configJson.ReadToEnd());
         }
 
