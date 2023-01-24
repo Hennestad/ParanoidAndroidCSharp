@@ -15,6 +15,7 @@ using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ParanoidAndroid.Modules
 {
@@ -29,6 +30,7 @@ namespace ParanoidAndroid.Modules
             // Get the bot token from the Config.json file.
             JObject config = Functions.GetConfig();
             string wineToken = config["wineApi"].Value<string>();
+            string bingKey = config["bingApi"].Value<string>();
 
             var client = new HttpClient();
 
@@ -51,6 +53,9 @@ namespace ParanoidAndroid.Modules
                 string street = (string)item["address"]["street"];
                 string postalCode = (string)item["address"]["postalCode"];
                 string city = (string)item["address"]["city"];
+                string gps = (string)item["address"]["gpsCoord"];
+                string bingGps = gps.Trim().Replace(';', ',');
+                var bingUri = "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/" + bingGps + "/18?mapSize=500,500&pp=" + bingGps + ";66&mapLayer=Basemap,Buildings&key=" + bingKey;
 
                 //EmbedBuilder
                 var store = new EmbedBuilder
@@ -60,9 +65,10 @@ namespace ParanoidAndroid.Modules
                     ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Vinmonopolets_logo.jpg/600px-Vinmonopolets_logo.jpg"
                 };
                 if (item["storeName"] != null)
-                    store.Title = item["storeName"]?.Value<String>();
+                    store.Title = item["storeName"]?.Value<System.String>();
                 if (item["address"] != null)
                     store.Description = street + Environment.NewLine + postalCode + Environment.NewLine + city;
+                    store.ImageUrl = bingUri;
 
 
 
