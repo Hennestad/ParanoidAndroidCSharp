@@ -8,6 +8,7 @@ using System.Reflection.Emit;
 using System.Linq;
 using System.Xml.Linq;
 using static System.Net.WebRequestMethods;
+using System.Web;
 
 namespace ParanoidAndroid.Modules
 {
@@ -28,7 +29,7 @@ namespace ParanoidAndroid.Modules
             //Get all the descendant elements of the item elements.
             foreach (XElement element in nodeList.Descendants("item")
                 .Where(x => x.Element("description")?
-                .Value.Contains(categoryInput, StringComparison
+                .Value.Contains(HttpUtility.UrlEncode(categoryInput), StringComparison
                 .OrdinalIgnoreCase) == true))
             {
                 XNamespace media = "http://search.yahoo.com/mrss/";

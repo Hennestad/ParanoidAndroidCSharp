@@ -16,6 +16,7 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Net;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Web;
 
 namespace ParanoidAndroid.Modules
 {
@@ -40,7 +41,7 @@ namespace ParanoidAndroid.Modules
             client.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", wineToken);
 
-            var uri = "https://apis.vinmonopolet.no/stores/v0/details?storeNameContains=" + categoryInput;
+            var uri = "https://apis.vinmonopolet.no/stores/v0/details?storeNameContains=" + HttpUtility.UrlEncode(categoryInput);
             var response = await client.GetAsync(uri);
             string responseString = await response.Content.ReadAsStringAsync();
             JArray result = JArray.Parse(responseString);
