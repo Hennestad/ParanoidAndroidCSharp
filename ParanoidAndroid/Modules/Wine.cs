@@ -55,23 +55,21 @@ namespace ParanoidAndroid.Modules
                 string postalCode = (string)item["address"]["postalCode"];
                 string city = (string)item["address"]["city"];
                 string gps = (string)item["address"]["gpsCoord"];
-                string bingGps = gps.Trim().Replace(';', ',');
-                var bingUri = "https://dev.virtualearth.net/REST/v1/Imagery/Map/Road/" + bingGps + "/18?mapSize=500,500&pp=" + bingGps + ";66&mapLayer=Basemap,Buildings&key=" + bingKey;
+                string bingGps = gps.Trim().Replace(';', '~');
+                string bingMapUri = "https://www.bing.com/maps/?cp=" + bingGps + "&lvl=18.0";
 
                 //EmbedBuilder
                 var store = new EmbedBuilder
                 {
-                    // Embed property can be set within object initializer
                     Color = Color.DarkTeal,
                     ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Vinmonopolets_logo.jpg/600px-Vinmonopolets_logo.jpg"
                 };
+
                 if (item["storeName"] != null)
                     store.Title = item["storeName"]?.Value<System.String>();
                 if (item["address"] != null)
-                    store.Description = street + Environment.NewLine + postalCode + Environment.NewLine + city;
-                    store.ImageUrl = bingUri;
-
-
+                    store.Description = street + Environment.NewLine + postalCode + Environment.NewLine + city + Environment.NewLine + bingMapUri;
+                    store.ImageUrl = bingMapUri;
 
                 //Your embed needs to be built before it is able to be sent
                 await ReplyAsync(embed: store.Build());
