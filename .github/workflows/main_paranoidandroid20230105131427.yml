@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - paranoidandroid20230105131427
+name: Build and deploy ASP.Net Core app to Azure Web App - ParanoidAndroid20230105131427
 
 on:
   push:
@@ -51,7 +51,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'paranoidandroid20230105131427'
+          app-name: 'ParanoidAndroid20230105131427'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_E36618F92B5243E390FA6011A5B775BD }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_C57F3639047B4AF091C8247F5E3A7D6D }}
           package: .
