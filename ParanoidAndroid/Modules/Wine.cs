@@ -56,7 +56,7 @@ namespace ParanoidAndroid.Modules
                 string city = (string)item["address"]["city"];
                 string gps = (string)item["address"]["gpsCoord"];
                 string bingGps = gps.Trim().Replace(';', '~');
-                string bingMapUri = "https://www.bing.com/maps/?cp=" + bingGps + "&lvl=18.0";
+                string bingMapUri = "https://www.bing.com/maps/?cp=" + bingGps + "&ss=yp.vinmonopolet~sst.1&lvl=18.0";
 
                 //EmbedBuilder
                 var store = new EmbedBuilder
