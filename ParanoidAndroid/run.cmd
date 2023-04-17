@@ -1,1 +1,1 @@
-dotned ParanoidAndroid.dll %*
+dotnet ParanoidAndroid.dll %*
