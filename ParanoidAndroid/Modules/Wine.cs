@@ -24,7 +24,7 @@ namespace ParanoidAndroid.Modules
     {
         [Command("wine")] // Command name.
         [Alias("winewine")] // Aliases that will also trigger the command.
-        [Summary("Find the closes wine monopoly.")] // Command summary.
+        [Summary("Find the closest wine monopoly.")] // Command summary.
 
         public async Task WineWine([Remainder] string categoryInput)
         {
