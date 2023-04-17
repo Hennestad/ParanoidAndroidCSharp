@@ -1,1 +1,0 @@
-dotnet ParanoidAndroid.dll %*
