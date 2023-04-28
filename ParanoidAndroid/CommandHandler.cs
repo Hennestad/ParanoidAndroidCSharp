@@ -8,6 +8,7 @@ using Newtonsoft.Json.Linq;
 using Discord;
 using System.Linq;
 using Newtonsoft.Json;
+using Discord.Net;
 
 namespace ParanoidAndroid
 {
@@ -25,9 +26,15 @@ namespace ParanoidAndroid
             _services = services;
 
             // Event handlers
+            _client.SlashCommandExecuted += SlashCommandHandler;
             _client.Ready += ClientReadyAsync;
             _client.MessageReceived += HandleCommandAsync;
             _client.JoinedGuild += SendJoinMessageAsync;
+        }
+
+        private async Task SlashCommandHandler(SocketSlashCommand command)
+        {
+            await command.RespondAsync($"You executed {command.Data.Name}");
         }
 
         private async Task HandleCommandAsync(SocketMessage rawMessage)
@@ -36,6 +43,8 @@ namespace ParanoidAndroid
                 return;
 
             var context = new SocketCommandContext(_client, message);
+
+            //Prefix commands
 
             int argPos = 0;
 
@@ -50,6 +59,25 @@ namespace ParanoidAndroid
 
                 if (!result.IsSuccess && result.Error.HasValue)
                     await context.Channel.SendMessageAsync($":x: {result.ErrorReason}");
+            }
+
+            //Slash commands
+            ulong ripskinzId = config["ripskinzId"].Value<ulong>();
+            var guild = _client.GetGuild(ripskinzId);
+            var guildCommand = new SlashCommandBuilder();
+
+            // Command names have to be all lowercase and match the regular expression ^[\w-]{3,32}$
+            guildCommand.WithName("first-command");
+            guildCommand.WithDescription("This is my first guild slash command!");
+
+            try
+            {
+                await guild.CreateApplicationCommandAsync(guildCommand.Build());
+            }
+            catch (HttpException exception)
+            {
+                var json = JsonConvert.SerializeObject(exception.Errors, Formatting.Indented);
+                Console.WriteLine(json);
             }
         }
 
