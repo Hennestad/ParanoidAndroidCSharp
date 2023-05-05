@@ -1,7 +1,11 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
 using System;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using System.Configuration;
 
 namespace ParanoidAndroid.Modules
 {
@@ -50,6 +54,31 @@ namespace ParanoidAndroid.Modules
                 await ReplyAsync($"Yes, **{Context.User.Username}**, you're an admin!");
             else
                 await ReplyAsync($"No, **{Context.User.Username}**, you're **not** an admin!");
+        }
+
+        [Command("Fredrik")]
+        [Summary("Say hello to Fredrik.")]
+        public async Task HelloFredrik()
+        {
+            if (Context.Message.Author.Id == 183283273881878534)
+            {
+                string? logicAppUrl = Environment.GetEnvironmentVariable("APPSETTING_LOGIC_APP_URL")?.ToString();
+                var client = new HttpClient();
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, logicAppUrl);
+                HttpResponseMessage response = client.SendAsync(request).Result;
+                if (response.Content != null)
+                    Console.WriteLine(response.Content);
+                else 
+                    Console.WriteLine("No response from logic app.");
+
+                await ReplyAsync($"I will notify Fredrik that your are trying to reach him. :smile:");
+            }
+            else if (Context.Message.Author.Id == 123860566522593282)
+            {
+                await ReplyAsync($"Hello Fredrik! :smile:");
+            }
+            else
+                await ReplyAsync($"Hello there, **{Context.User.Username}**! Fredrik seems to be bussy at the moment.");
         }
     }
 }
