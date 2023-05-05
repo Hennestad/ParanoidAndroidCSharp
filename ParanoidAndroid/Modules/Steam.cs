@@ -42,7 +42,7 @@ namespace ParanoidAndroid.Modules
             client.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", steamKey);
 
-            var uri = "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=68D7B04CE54A0A920F3ED50829E56703&steamid=" + HttpUtility.UrlEncode(categoryInput) + "/&format=json";
+            var uri = "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=" + steamKey + "&steamid=" + HttpUtility.UrlEncode(categoryInput) + "/&format=json";
             var response = await client.GetAsync(uri);
             string responseString = await response.Content.ReadAsStringAsync();
             JObject result = JObject.Parse(responseString);
