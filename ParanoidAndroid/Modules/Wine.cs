@@ -49,20 +49,14 @@ namespace ParanoidAndroid.Modules
             bool foundStore = false;
 
             foreach (JObject item in result)
+
             {
-                try
-                {
-                    string street = (string)item["address"]["street"];
-                    string postalCode = (string)item["address"]["postalCode"];
-                    string city = (string)item["address"]["city"];
-                    string gps = (string)item["address"]["gpsCoord"];
-                    string bingGps = gps.Trim().Replace(';', '~');
-                    string bingMapUri = "https://www.bing.com/maps/?cp=" + bingGps + "&ss=yp.vinmonopolet~sst.1&lvl=18.0";
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
+                string street = (string)item["address"]["street"];
+                string postalCode = (string)item["address"]["postalCode"];
+                string city = (string)item["address"]["city"];
+                string gps = (string)item["address"]["gpsCoord"];
+                string bingGps = gps.Trim().Replace(';', '~');
+                string bingMapUri = "https://www.bing.com/maps/?cp=" + bingGps + "&ss=yp.vinmonopolet~sst.1&lvl=18.0";
 
                 //EmbedBuilder
                 var store = new EmbedBuilder
