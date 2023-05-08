@@ -56,12 +56,12 @@ namespace ParanoidAndroid.Modules
                 string responseString = await response.Content.ReadAsStringAsync();
                 JObject result = JObject.Parse(responseString);
 
-                string mostPlayedGame = result["response"]["games"][0]["name"].ToString();
-                string mostPlayedGameMinutes = result["response"]["games"][0]["playtime_2weeks"].ToString();
-                string mostPlayedGameMinutesForever = result["response"]["games"][0]["playtime_forever"].ToString();
-                string mostPlayedGameMinutesMac = result["response"]["games"][0]["playtime_mac_forever"].ToString();
-                string imageNumber = result["response"]["games"][0]["img_icon_url"].ToString();
-                string appId = result["response"]["games"][0]["appid"].ToString();
+                string mostPlayedGame = (string)result["response"]["games"][0]["name"];
+                int mostPlayedGameMinutes = (int)result["response"]["games"][0]["playtime_2weeks"];
+                int mostPlayedGameMinutesForever = (int)result["response"]["games"][0]["playtime_forever"];
+                int mostPlayedGameMinutesMac = (int)result["response"]["games"][0]["playtime_mac_forever"];
+                string imageNumber = (string)result["response"]["games"][0]["img_icon_url"];
+                string appId = (string)result["response"]["games"][0]["appid"];
 
 
                 //EmbedBuilder
@@ -72,11 +72,11 @@ namespace ParanoidAndroid.Modules
                     Title = "Most Played Game The Last Two Weeks: "
                     + Environment.NewLine
                     + mostPlayedGame,
-                    Description = "Amount of minutes played the last two weeks: " + mostPlayedGameMinutes
+                    Description = "Amount of hours played the last two weeks: " + (mostPlayedGameMinutes / 60)
                     + Environment.NewLine
-                    + "Amount of minutes spent on this game in total: " + mostPlayedGameMinutesForever
+                    + "Amount of hours spent on this game in total: " + (mostPlayedGameMinutesForever / 60)
                     + Environment.NewLine
-                    + "Amount of minutes spent on this game in total on Mac: " + mostPlayedGameMinutesMac + " :flushed:",
+                    + "Amount of hours spent on this game in total on Mac: " + (mostPlayedGameMinutesMac / 60) + " :flushed:",
                     ThumbnailUrl = "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/" + appId + "/" + imageNumber + ".jpg"
                 };
 
