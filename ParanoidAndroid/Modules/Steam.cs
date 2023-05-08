@@ -38,41 +38,57 @@ namespace ParanoidAndroid.Modules
 
 
             // Request headers
-
             client.DefaultRequestHeaders.CacheControl = CacheControlHeaderValue.Parse("no-cache");
             client.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", steamKey);
 
-            var uri = "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=" + steamKey + "&steamid=" + HttpUtility.UrlEncode(categoryInput) + "/&format=json";
-            var response = await client.GetAsync(uri);
-            string responseString = await response.Content.ReadAsStringAsync();
-            JObject result = JObject.Parse(responseString);
-            string mostPlayedGame = result["response"]["games"][0]["name"].ToString();
-            string mostPlayedGameMinutes = result["response"]["games"][0]["playtime_2weeks"].ToString();
-            string mostPlayedGameMinutesForever = result["response"]["games"][0]["playtime_forever"].ToString();
-            string mostPlayedGameMinutesMac = result["response"]["games"][0]["playtime_mac_forever"].ToString();
-            string imageNumber = result["response"]["games"][0]["img_icon_url"].ToString();
-            string appId = result["response"]["games"][0]["appid"].ToString();
+            var vanityUri = "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=" + steamKey + "&vanityurl=" + HttpUtility.UrlEncode(categoryInput);
+            var vanityResponse = await client.GetAsync(vanityUri);
+            string vanityResponseString = await vanityResponse.Content.ReadAsStringAsync();
+            JObject vanityResult = JObject.Parse(vanityResponseString);
 
+            //If the vanityResult is null then the categoryInput is most likely the steamId number itself. 
+            string steamId = vanityResult?["response"]?["steamid"]?.ToString() ?? categoryInput;
 
-            //EmbedBuilder
-            var steam = new EmbedBuilder
+            try
             {
-                // Embed property can be set within object initializer
-                Color = Color.Purple,
-                Title = "Most Played Game The Last Two Weeks: "
-                + Environment.NewLine
-                + mostPlayedGame,
-                Description = "Amount of minutes played the last two weeks: " + mostPlayedGameMinutes
-                + Environment.NewLine
-                + "Amount of minutes spent on this game in total: " + mostPlayedGameMinutesForever
-                + Environment.NewLine
-                + "Amount of minutes spent on this game in total on Mac: " + mostPlayedGameMinutesMac + " :flushed:",
-                ThumbnailUrl = "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/" + appId + "/" + imageNumber + ".jpg"
-            };
+                var uri = "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=" + steamKey + "&steamid=" + steamId + "/&format=json";
+                var response = await client.GetAsync(uri);
+                string responseString = await response.Content.ReadAsStringAsync();
+                JObject result = JObject.Parse(responseString);
 
-            //Your embed needs to be built before it is able to be sent
-            await ReplyAsync(embed: steam.Build());
-            Console.WriteLine("Posted " + categoryInput + " statistics");
+                string mostPlayedGame = result["response"]["games"][0]["name"].ToString();
+                string mostPlayedGameMinutes = result["response"]["games"][0]["playtime_2weeks"].ToString();
+                string mostPlayedGameMinutesForever = result["response"]["games"][0]["playtime_forever"].ToString();
+                string mostPlayedGameMinutesMac = result["response"]["games"][0]["playtime_mac_forever"].ToString();
+                string imageNumber = result["response"]["games"][0]["img_icon_url"].ToString();
+                string appId = result["response"]["games"][0]["appid"].ToString();
+
+
+                //EmbedBuilder
+                var steam = new EmbedBuilder
+                {
+                    // Embed property can be set within object initializer
+                    Color = Color.Purple,
+                    Title = "Most Played Game The Last Two Weeks: "
+                    + Environment.NewLine
+                    + mostPlayedGame,
+                    Description = "Amount of minutes played the last two weeks: " + mostPlayedGameMinutes
+                    + Environment.NewLine
+                    + "Amount of minutes spent on this game in total: " + mostPlayedGameMinutesForever
+                    + Environment.NewLine
+                    + "Amount of minutes spent on this game in total on Mac: " + mostPlayedGameMinutesMac + " :flushed:",
+                    ThumbnailUrl = "https://cdn.cloudflare.steamstatic.com/steamcommunity/public/images/apps/" + appId + "/" + imageNumber + ".jpg"
+                };
+
+                //Your embed needs to be built before it is able to be sent
+                await ReplyAsync(embed: steam.Build());
+                Console.WriteLine("Posted " + categoryInput + " statistics");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return;
+            }
         }
     }
 }
