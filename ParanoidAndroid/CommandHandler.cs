@@ -1,14 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
-using Newtonsoft.Json.Linq;
-using Discord;
-using System.Linq;
-using Newtonsoft.Json;
 using Discord.Net;
+using Discord.WebSocket;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 namespace ParanoidAndroid
 {

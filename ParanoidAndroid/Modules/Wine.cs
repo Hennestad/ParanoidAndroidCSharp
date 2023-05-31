@@ -1,21 +1,7 @@
 ﻿using Discord;
 using Discord.Commands;
-using Discord.WebSocket;
-using System;
-using System.Threading.Tasks;
-using System.IO;
-using System.Reflection.Emit;
-using System.Linq;
-using System.Xml.Linq;
-using static System.Net.WebRequestMethods;
-using Newtonsoft.Json;
-using System;
-using System.Net.NetworkInformation;
-using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
-using System.Net;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Web;
 
 namespace ParanoidAndroid.Modules
@@ -69,7 +55,7 @@ namespace ParanoidAndroid.Modules
                     store.Title = item["storeName"]?.Value<System.String>();
                 if (item["address"] != null)
                     store.Description = street + Environment.NewLine + postalCode + Environment.NewLine + city + Environment.NewLine + bingMapUri;
-                    store.ImageUrl = bingMapUri;
+                store.ImageUrl = bingMapUri;
 
                 //Your embed needs to be built before it is able to be sent
                 await ReplyAsync(embed: store.Build());

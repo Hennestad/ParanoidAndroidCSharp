@@ -1,11 +1,5 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
-using System;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Configuration;
 
 namespace ParanoidAndroid.Modules
 {
@@ -68,7 +62,7 @@ namespace ParanoidAndroid.Modules
                 HttpResponseMessage response = client.SendAsync(request).Result;
 
                 if (response.Content != null)
-                { 
+                {
                     Console.WriteLine(response.Content);
                     await ReplyAsync($"I will notify Fredrik that your are trying to reach him. :smile:");
                 }
