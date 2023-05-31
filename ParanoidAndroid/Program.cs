@@ -4,6 +4,8 @@ using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DependencyCollector;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace ParanoidAndroid
 {
@@ -19,7 +21,8 @@ namespace ParanoidAndroid
             using var services = ConfigureServices();
 
             telemetryClient = Telemtry.GetClient();
-
+            DependencyTrackingTelemetryModule depModule = new DependencyTrackingTelemetryModule();
+            depModule.Initialize(TelemetryConfiguration.Active);
             Console.WriteLine("Ready for takeoff...");
             var client = services.GetRequiredService<DiscordSocketClient>();
 
@@ -33,6 +36,8 @@ namespace ParanoidAndroid
             // Log in to Discord and start the bot.
             await client.LoginAsync(TokenType.Bot, token);
             await client.StartAsync();
+
+            telemetryClient.TrackEvent("Bot started");
 
             await services.GetRequiredService<CommandHandlingService>().InitializeAsync();
 

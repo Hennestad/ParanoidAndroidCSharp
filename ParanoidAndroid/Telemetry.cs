@@ -15,7 +15,7 @@ namespace ParanoidAndroid
         static Telemtry()
         {
             TelemetryConfiguration config = TelemetryConfiguration.CreateDefault();
-            config.InstrumentationKey = "InstrumentationKey=3a0beed7-cf40-45a8-963c-573d9c8aaaaa;IngestionEndpoint=https://norwayeast-0.in.applicationinsights.azure.com/;LiveEndpoint=https://norwayeast.livediagnostics.monitor.azure.com/";
+            config.InstrumentationKey = Environment.GetEnvironmentVariable("APPLICATIONINSIGHTS_CONNECTION_STRING").ToString();
             _client = new TelemetryClient(config);
         }
 
