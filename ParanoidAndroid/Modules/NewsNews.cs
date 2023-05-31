@@ -37,7 +37,7 @@ namespace ParanoidAndroid.Modules
                 {
                     // Embed property can be set within object initializer
                     Color = Color.Blue,
-                    ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png"
+                    ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png",
                 };
 
                 // Or with methods

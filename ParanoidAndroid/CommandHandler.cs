@@ -49,10 +49,10 @@ namespace ParanoidAndroid
             int argPos = 0;
 
             JObject config = Functions.GetConfig();
-            string[] prefixes = JsonConvert.DeserializeObject<string[]>(config["prefixes"].ToString());
+            string[]? prefixes = JsonConvert.DeserializeObject<string[]>(config["prefixes"]!.ToString());
 
             // Check if message has any of the prefixes or mentiones the bot.
-            if (prefixes.Any(x => message.HasStringPrefix(x, ref argPos)) || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
+            if (prefixes!.Any(x => message.HasStringPrefix(x, ref argPos)) || message.HasMentionPrefix(_client.CurrentUser, ref argPos))
             {
                 // Execute the command.
                 var result = await _commands.ExecuteAsync(context, argPos, _services);
@@ -62,7 +62,7 @@ namespace ParanoidAndroid
             }
 
             //Slash commands
-            ulong ripskinzId = config["ripskinzId"].Value<ulong>();
+            ulong ripskinzId = config["ripskinzId"]!.Value<ulong>();
             var guild = _client.GetGuild(ripskinzId);
             var guildCommand = new SlashCommandBuilder();
 
@@ -84,7 +84,7 @@ namespace ParanoidAndroid
         private async Task SendJoinMessageAsync(SocketGuild guild)
         {
             JObject config = Functions.GetConfig();
-            string joinMessage = config["join_message"]?.Value<string>();
+            string? joinMessage = config["join_message"]!.Value<string>();
 
             if (string.IsNullOrEmpty(joinMessage))
                 return;

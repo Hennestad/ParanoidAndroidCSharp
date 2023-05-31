@@ -19,17 +19,22 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.VisualBasic;
 using System.Text.Encodings.Web;
 using System.Web;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace ParanoidAndroid.Modules
 {
     public class Steam : ModuleBase<SocketCommandContext>
     {
+        public TelemetryClient telemetry = new TelemetryClient(TelemetryConfiguration.CreateDefault());
+
         [Command("steam")] // Command name.
         [Alias("damp")] // Aliases that will also trigger the command.
         [Summary("Make the bot post information about a steam user.")] // Command summary.
 
         public async Task SteamUser([Remainder] string categoryInput)
         {
+
             // Get the bot token from the Config.json file.
             JObject config = Functions.GetConfig();
             string steamKey = config["steamApi"].Value<string>();
@@ -83,10 +88,15 @@ namespace ParanoidAndroid.Modules
                 //Your embed needs to be built before it is able to be sent
                 await ReplyAsync(embed: steam.Build());
                 Console.WriteLine("Posted " + categoryInput + " statistics");
+                telemetry.TrackEvent("steam", new Dictionary<string, string>()
+                {
+                    {"user", Context.User.Username}
+                });
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                telemetry.TrackException(ex);
                 return;
             }
         }
