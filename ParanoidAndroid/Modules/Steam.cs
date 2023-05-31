@@ -3,15 +3,11 @@ using Discord.Commands;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using System.Web;
-using Microsoft.ApplicationInsights;
-using Microsoft.ApplicationInsights.Extensibility;
 
 namespace ParanoidAndroid.Modules
 {
     public class Steam : ModuleBase<SocketCommandContext>
     {
-        public TelemetryClient telemetry = new TelemetryClient(TelemetryConfiguration.CreateDefault());
-
         [Command("steam")] // Command name.
         [Alias("damp")] // Aliases that will also trigger the command.
         [Summary("Make the bot post information about a steam user.")] // Command summary.
@@ -72,15 +68,10 @@ namespace ParanoidAndroid.Modules
                 //Your embed needs to be built before it is able to be sent
                 await ReplyAsync(embed: steam.Build());
                 Console.WriteLine("Posted " + categoryInput + " statistics");
-                telemetry.TrackEvent("steam", new Dictionary<string, string>()
-                {
-                    {"user", Context.User.Username}
-                });
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                telemetry.TrackException(ex);
                 return;
             }
         }
