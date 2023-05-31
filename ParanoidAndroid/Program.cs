@@ -1,21 +1,24 @@
-﻿using System;
-using System.Threading.Tasks;
-using Discord;
-using Discord.WebSocket;
+﻿using Discord;
 using Discord.Commands;
+using Discord.WebSocket;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
+using Microsoft.ApplicationInsights;
 
 namespace ParanoidAndroid
 {
     public class Program
     {
+        public TelemetryClient? telemetryClient;
+
         static void Main(string[] args)
             => new Program().MainAsync().GetAwaiter().GetResult();
 
         public async Task MainAsync()
         {
             using var services = ConfigureServices();
+
+            telemetryClient = Telemtry.GetClient();
 
             Console.WriteLine("Ready for takeoff...");
             var client = services.GetRequiredService<DiscordSocketClient>();
@@ -25,7 +28,7 @@ namespace ParanoidAndroid
 
             // Get the bot token from the Config.json file.
             JObject config = Functions.GetConfig();
-            string token = config["token"].Value<string>();
+            string? token = config["token"]!.Value<string>();
 
             // Log in to Discord and start the bot.
             await client.LoginAsync(TokenType.Bot, token);

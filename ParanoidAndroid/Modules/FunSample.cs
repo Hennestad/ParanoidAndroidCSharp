@@ -1,11 +1,5 @@
 ﻿using Discord.Commands;
 using Discord.WebSocket;
-using System;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Configuration;
 
 namespace ParanoidAndroid.Modules
 {
@@ -66,12 +60,17 @@ namespace ParanoidAndroid.Modules
                 var client = new HttpClient();
                 HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, logicAppUrl);
                 HttpResponseMessage response = client.SendAsync(request).Result;
-                if (response.Content != null)
-                    Console.WriteLine(response.Content);
-                else 
-                    Console.WriteLine("No response from logic app.");
 
-                await ReplyAsync($"I will notify Fredrik that your are trying to reach him. :smile:");
+                if (response.Content != null)
+                {
+                    Console.WriteLine(response.Content);
+                    await ReplyAsync($"I will notify Fredrik that your are trying to reach him. :smile:");
+                }
+                else
+                {
+                    Console.WriteLine("No response from logic app.");
+                    await ReplyAsync($"Something seems to be broken.");
+                }
             }
             else if (Context.Message.Author.Id == 123860566522593282)
             {

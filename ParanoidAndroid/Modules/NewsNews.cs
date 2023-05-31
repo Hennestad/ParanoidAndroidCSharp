@@ -1,12 +1,7 @@
-﻿using Discord.Commands;
-using Discord;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using Discord;
+using Discord.Commands;
 using System.Web;
+using System.Xml.Linq;
 
 namespace ParanoidAndroid.Modules
 {
@@ -37,7 +32,7 @@ namespace ParanoidAndroid.Modules
                 {
                     // Embed property can be set within object initializer
                     Color = Color.Blue,
-                    ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png"
+                    ThumbnailUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/BBC_News_2022_%28Alt%2C_boxed%29.svg/240px-BBC_News_2022_%28Alt%2C_boxed%29.svg.png",
                 };
 
                 // Or with methods
