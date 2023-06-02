@@ -35,4 +35,4 @@ jobs:
           registryPassword: ${{ secrets.PARANOIDCONTAINERAPP_REGISTRY_PASSWORD }}
           containerAppName: paranoidcontainerapp
           resourceGroup: DiscordGroupNO
-          imageToBuild: paranoidandroid.azurecr.io/paranoidcontainerapp:latest
+          imageToBuild: paranoidandroid.azurecr.io/paranoidcontainerapp:${{ github.sha }}
